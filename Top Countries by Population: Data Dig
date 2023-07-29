@@ -245,6 +245,7 @@ SELECT name, fertility_rate FROM countries GROUP BY name;
 --find average fertility rate--
 SELECT AVG(fertility_rate)
 FROM countries;
+
 --add a new column that states above or below fertility rate by country--
 SELECT name,
     CASE
