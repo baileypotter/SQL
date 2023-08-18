@@ -61,3 +61,62 @@ SELECT Product, SUM(quantity)
 FROM BIT_DB.FebSales
 WHERE location like '%Los Angeles%'
 GROUP BY Product;
+
+#9. Which locations in NY received at least 3 orders in january and how many did they receive?
+SELECT distinct location, count(orderID)
+FROM BIT_DB.JanSales
+WHERE location LIKE  '%NY%'
+AND length(orderID) = 6
+AND orderid <> 'Order ID'
+GROUP BY location
+HAVING count(orderID)>2;
+
+#9. How many of each type of headphone was sold in feb?
+SELECT SUM(quantity) as quantity, product
+FROM BIT_DB.FebSales
+WHERE Product like '%headphones%'
+GROUP BY Product;
+
+#10. What was the avg spent per accnt in feb?
+SELECT AVG(quantity*price)/count(cust.acctnum)
+FROM BIT_DB.FebSales feb
+
+LEFT JOIN BIT_DB.customers cust
+ON Feb.orderid=cust.order_id
+
+WHERE length(orderid)=6
+AND orderid <> 'Order ID';
+
+#11. What was the avg quantity of the products purchased per accnt in feb?
+SELECT AVG(quantity)/count(cust.acctnum)
+FROM BIT_DB.FebSales feb
+
+LEFT JOIN BIT_DB.customers cust
+ON Feb.orderid-cust.order_id
+
+WHERE length(orderid)=6
+AND orderid <> 'Order ID';
+
+#12. Which product brought most rev in jan and how much rev
+SELECT Product,
+SUM(quantity*price)
+FROM BIT_DB.JanSales
+GROUP BY product
+ORDER BY SUM(quantity*price) desc
+LIMIT 1;
+
+--Why do we use SUM(quantity*price) instead of 
+--SUM(quantity)*price? In this question, we are using 
+--GROUP BY product. The price of each individual 
+--product does not change. 
+--That is why SUM(quantity*price) and SUM(quantity)*price
+--in this specific question, both give the same results.
+
+--To visualize this lets run the SQL below
+SELECT SUM(quantity),
+price,
+SUM(quantity)*price AS revenue,
+SUM(quantity*price) AS revenue2,
+product 
+FROM BIT_DB.JanSales
+GROUP BY product;
